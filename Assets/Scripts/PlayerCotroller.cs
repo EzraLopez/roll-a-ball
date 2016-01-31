@@ -58,7 +58,7 @@ public class PlayerCotroller : MonoBehaviour {
 	void SetCountText()
 	{
 		countText.text = "Count: " + count.ToString ();
-		if (count >= 13) 
+		if (count >= pickUpObjects.Length) 
 		{
             gameOver = true;
             winText.text = "You Win!";
@@ -72,15 +72,17 @@ public class PlayerCotroller : MonoBehaviour {
         SetCountText();
         winText.text = "";
         newGameButton.gameObject.SetActive(false);
-        if(gameOver)
+        
+		if(gameOver)
         {
             foreach(GameObject pu in pickUpObjects)
             {
                 pu.gameObject.SetActive(true);
             }
 
-            Vector3 initialPosition = new Vector3(0.0f, 0.0f, 0.0f);
-            rb.transform.position = initialPosition;
+			rb.transform.position = Vector3.zero;
+			rb.velocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
         }
     }
 //	// Use this for initialization
