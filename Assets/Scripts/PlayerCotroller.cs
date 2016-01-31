@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class PlayerCotroller : MonoBehaviour {
 
 	public float speed;
 	public Text countText;
 	public Text winText;
+    public Button newGameButton;
 
 	private Rigidbody rb;
 	private int count;
+    private bool gameOver;
+    private GameObject[] pickUpObjects;
 
 	void Start ()
 	{
@@ -18,12 +20,10 @@ public class PlayerCotroller : MonoBehaviour {
 			Screen.orientation = ScreenOrientation.Landscape;
 			speed = 400;
 		}
-			
-		
+        pickUpObjects = GameObject.FindGameObjectsWithTag("Pick Up");
 		rb = GetComponent<Rigidbody> ();
-		count = 0;
-		SetCountText ();
-		winText.text = "";
+        gameOver = false;
+        NewGame();
 	}
 			
 	// Called befor any Physics calculations
@@ -60,9 +60,29 @@ public class PlayerCotroller : MonoBehaviour {
 		countText.text = "Count: " + count.ToString ();
 		if (count >= 13) 
 		{
-			winText.text = "You Win!";
-		}
+            gameOver = true;
+            winText.text = "You Win!";
+            newGameButton.gameObject.SetActive(true);
+        }
 	}
+
+    public void NewGame()
+    {
+        count = 0;
+        SetCountText();
+        winText.text = "";
+        newGameButton.gameObject.SetActive(false);
+        if(gameOver)
+        {
+            foreach(GameObject pu in pickUpObjects)
+            {
+                pu.gameObject.SetActive(true);
+            }
+
+            Vector3 initialPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            rb.transform.position = initialPosition;
+        }
+    }
 //	// Use this for initialization
 //	void Start () {
 //	
